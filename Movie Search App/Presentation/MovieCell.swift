@@ -26,7 +26,12 @@ class MovieCell : UITableViewCell {
         self.mainView.movieTitle.text = movie.title
         self.mainView.movieDetail.text = movie.overview
         if let posterPath = movie.posterPath {
-            self.mainView.moviePoster.getCachedImages(URL.init(string: posterUrl+posterPath))
+            self.mainView.moviePoster.getCachedImages(URL.init(string: posterUrl+posterPath)){ [weak self] data in
+                //set image to data content
+                DispatchQueue.main.async {
+                    self?.mainView.moviePoster.image = UIImage.init(data: data)
+                }
+            }
         }
     }
 }
