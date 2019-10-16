@@ -30,12 +30,13 @@ extension UIImageView {
         self.clipsToBounds = true
     }
     
-    func getCachedImages(_ url: URL?) {
+    func getCachedImages(_ url: URL?, completion: @escaping(Data)->()) {
         var imageData = Data()
         
         // check if image is cached, then retrieve it
         if let absoluteString = url?.absoluteString, let data = imageCache.object(forKey: absoluteString as NSString) as Data? {
             imageData = data
+             completion(imageData)
         }
         else {
             
@@ -49,13 +50,12 @@ extension UIImageView {
                 }
                 imageData = data
                 imageCache.setObject(imageData as NSData, forKey: urlString as NSString)
+                 completion(imageData)
             }
         }
         
-        //set image to data content
-        DispatchQueue.main.async {
-            self.image = UIImage.init(data: imageData)
-        }
+       
+        
     }
 }
 
